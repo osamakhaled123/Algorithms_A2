@@ -22,7 +22,7 @@ int main(){
     int n,i,deadline,profit;
     cin>>n;
     Job Jobs[n];
-    vector<Job> final;
+    vector<Job> final(n);
     for(i=0;i<n;i++){
         cin>>ID>>deadline>>profit;
         Jobs[i].JopID = ID;
@@ -33,28 +33,29 @@ int main(){
     sort(Jobs,Jobs+n,compare);
 
 //    for(i=0;i<n;i++){
-//        cout<<Jobs[i].JopID<<" "<<Jobs[i].Deadline<<" "<<Jobs[i].profit<<"\n";
+//        cout<<final[i].JopID<<" "<<final[i].Deadline<<" "<<final[i].profit<<"\n";
 //    }
 
     for(i=0;i<n;i++){
         if(Jobs[i].Deadline > time){
             //time = Jobs[i].Deadline;
             time++;
-            final.push_back(Jobs[i]);
-        }
-    }
-
-    int z = final.size();
-
-    for(i=z-1;i>=0;i--){
-        if(final[i].Deadline == final[i-1].Deadline){
-            if(final[i].profit < final[i-1].profit){
-                swap(final[i],final[i-1]);
+            for(int k=min(Jobs[i].Deadline,n) - 1;k >= 0;k--){
+                if(final[k].profit == 0){
+                    final[k] = Jobs[i];
+                    break;
+                }
             }
         }
     }
 
+
+    int z = final.size();
+
     for(i=0;i<z;i++){
+        if(final[i].profit == 0){
+            continue;
+        }
         if(i == 0){
         cout<<final[i].JopID;
         }
